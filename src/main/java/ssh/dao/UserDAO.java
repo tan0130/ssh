@@ -1,8 +1,8 @@
 package ssh.dao;
 
+import org.jboss.logging.Param;
 import ssh.entity.User;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**

@@ -1,14 +1,21 @@
 package ssh.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * create bu tan on 2018-05-09
  * 用户实体类
  * */
-
+@Entity
 public class User {
+    @Id
     private int id; // 用户id
     private String userName; // 用户姓名
     private String age; // 用户性别
+
+    public User() {
+    }
 
     public User(int id, String userName, String age) {
         this.id = id;

@@ -2,19 +2,23 @@ package ssh.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ssh.dao.UserDAO;
 import ssh.entity.User;
 
-import javax.transaction.Transactional;
+import javax.annotation.Resource;
+
 import java.util.List;
 
 /**
  * create by tan on 2018-05-10
  * 用户操作业务逻辑层实现
  * */
-@Service
+@Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService{
+
+    //@Resource(name = "userDAO")
     @Autowired
     private UserDAO userDAO;
 

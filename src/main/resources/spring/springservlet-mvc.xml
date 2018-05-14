@@ -26,7 +26,7 @@
     <mvc:default-servlet-handler/>
 
     <!-- 配置处理器映射器和处理器适配器 -->
-    <mvc:annotation-driven validator="validator"/>
+    <!--<mvc:annotation-driven validator="validator"/>-->
 
     <!--&lt;!&ndash; HandlerMapping &ndash;&gt;
     <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
@@ -35,7 +35,7 @@
     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>-->
 
     <!-- 启用事务注解功能 -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!--<tx:annotation-driven transaction-manager="transactionManager" />-->
 
     <!-- 定义视图解析器 -->
     <bean id="viewResolver"

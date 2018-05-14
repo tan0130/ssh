@@ -31,6 +31,7 @@ public class UserDAOImpl implements UserDAO{
         String hql = "from User u where u.id=?";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setString(0, String.valueOf(id));
+        System.out.println(query.uniqueResult());
         return (User) query.uniqueResult();
     }
 

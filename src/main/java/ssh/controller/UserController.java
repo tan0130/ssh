@@ -2,6 +2,7 @@ package ssh.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -12,8 +13,9 @@ import ssh.entity.User;
 import ssh.service.UserService;
 import ssh.validator.UserValidator;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
+
 
 /**
  * create by tan on 2018-05-09
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
 @Transactional
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -35,24 +38,23 @@ public class UserController {
 
     // 获取所有用户信息
     @RequestMapping(value = "/getAllUser", method = RequestMethod.GET)
-    @ResponseBody
     public String getAllUser(HttpServletRequest request) {
         request.setAttribute("userList", userService.getAllUser());
         return "pages/allUser";
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    @ResponseBody
     public String toIndex() {
-        return "index";
+        return "/index";
     }
 
     // 删除用户信息
-    @RequestMapping(value = "/delUser", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delUser")
     @ResponseBody
-    public String delUser(int id) {
+    public String delUser(@RequestParam int id) {
         try {
             if(userService.getUser(id) == null) {
+                System.out.println("用户信息为：" + userService.getUser(id));
                 return "fail";
             } else {
                 userService.delUser(id);
@@ -65,8 +67,7 @@ public class UserController {
 
     // 获取用户信息
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    @ResponseBody
-    public String getUser(int id, HttpServletRequest request) {
+    public String getUser(@RequestParam int id, HttpServletRequest request) {
         request.setAttribute("user", userService.getUser(id));
         return "pages/editUser";
     }
@@ -91,14 +92,12 @@ public class UserController {
 
     // 跳转添加用户信息页面
     @RequestMapping(value = "/toAddUser")
-    @ResponseBody
     public String toAdd() {
         return "pages/addUser";
     }
 
     // 添加用户信息
     @RequestMapping(value = "/addUser")
-    @ResponseBody
     public String addUser(Model model, @Validated @ModelAttribute("user") User user, BindingResult result, Errors errors, HttpServletRequest request) {
         String userName = request.getParameter("userName");
         // 对输入进行验证，当用户名存在时进行提示，不提交页面
@@ -109,6 +108,7 @@ public class UserController {
            model.addAttribute("user", user);
            return "pages/addUser";
         } else {
+            userService.addUser(user);
             return "redirect:/user/getAllUser";
         }
     }

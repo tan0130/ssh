@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <!-- 只解析除controller之外的注解(即解析service、dao), 避免重复加载导致事务失效  -->
-    <context:component-scan base-package="ssh.entity, ssh.dao, ssh.service, ssh.validator">
+    <context:component-scan base-package="ssh">
         <!-- annotation为spring-mvc中解析的内容 -->
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
@@ -29,7 +29,12 @@
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <!-- packagesToScan 扫描包所在路径（name中的内容其实是个关键字，可以扫描一整个包） -->
-        <property name="packagesToScan" value="ssh.entity"/>
+        <property name="packagesToScan">
+            <list>
+                <!-- 此处可添加多个entity -->
+                <value>ssh.entity</value>
+            </list>
+        </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
@@ -43,6 +48,10 @@
         </property>
     </bean>
 
+    <bean id = "userDAO" class="ssh.dao.UserDAOImpl">
+
+    </bean>
+
     <!-- 配置一个事务管理器 -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
@@ -50,13 +59,13 @@
     </bean>
 
     <!-- 校验器，配置validator -->
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
-        <!--<property name="validationMessageSource" ref="validationMessageSource"></property>-->
-    </bean>
+    <!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"></property>
+        <property name="validationMessageSource" ref="validationMessageSource"></property>
+    </bean>-->
 
     <!-- 配置validationMessageSource -->
-    <!--<bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+   <!-- <bean id="validationMessageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         &lt;!&ndash; 指定校验信息的资源文件的基本文件名称，不包括后缀，后缀默认是properties &ndash;&gt;
         <property name="basenames">
             <list>
